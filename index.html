@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YT Chrome Exporter</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- Upload View -->
+    <section id="upload-view" class="view active">
+      <div class="upload-zone" id="upload-zone">
+        <div class="upload-icon">
+          <svg viewBox="0 0 24 24" width="64" height="64" fill="#888">
+            <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/>
+          </svg>
+        </div>
+        <p class="upload-title">Drop a video here</p>
+        <p class="upload-subtitle">or click to browse</p>
+        <input type="file" id="file-input" accept="video/*" hidden>
+        <div class="upload-warning" id="upload-warning" hidden></div>
+      </div>
+    </section>
+
+    <!-- Player View -->
+    <section id="player-view" class="view">
+      <div class="player-container" id="player-container">
+        <video id="video" preload="metadata"></video>
+
+        <!-- Top gradient + title -->
+        <div class="player-top-gradient" id="player-top">
+          <span class="video-title" id="video-title"></span>
+        </div>
+
+        <!-- Center play button -->
+        <div class="player-center-play" id="center-play">
+          <div class="center-play-circle">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Loading spinner -->
+        <div class="player-spinner" id="player-spinner" hidden>
+          <div class="spinner-arc"></div>
+        </div>
+
+        <!-- Bottom controls -->
+        <div class="player-bottom" id="player-bottom">
+          <!-- Progress bar -->
+          <div class="progress-container" id="progress-container">
+            <div class="progress-track">
+              <div class="progress-buffered" id="progress-buffered"></div>
+              <div class="progress-played" id="progress-played"></div>
+              <div class="progress-scrubber" id="progress-scrubber"></div>
+            </div>
+            <div class="progress-tooltip" id="progress-tooltip">0:00</div>
+          </div>
+
+          <!-- Control bar -->
+          <div class="control-bar">
+            <div class="controls-left">
+              <button class="ctrl-btn" id="btn-play" aria-label="Play"></button>
+              <button class="ctrl-btn" id="btn-next" aria-label="Next"></button>
+              <div class="volume-group">
+                <button class="ctrl-btn" id="btn-volume" aria-label="Volume"></button>
+                <div class="volume-slider-container" id="volume-slider-container">
+                  <div class="volume-slider-track">
+                    <div class="volume-slider-fill" id="volume-slider-fill"></div>
+                    <div class="volume-slider-handle" id="volume-slider-handle"></div>
+                  </div>
+                </div>
+              </div>
+              <span class="timestamp" id="timestamp">0:00 / 0:00</span>
+            </div>
+            <div class="controls-right">
+              <button class="ctrl-btn" id="btn-cc" aria-label="Captions"></button>
+              <button class="ctrl-btn" id="btn-settings" aria-label="Settings"></button>
+              <button class="ctrl-btn" id="btn-miniplayer" aria-label="Miniplayer"></button>
+              <button class="ctrl-btn" id="btn-theater" aria-label="Theater mode"></button>
+              <button class="ctrl-btn" id="btn-fullscreen" aria-label="Fullscreen"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions below player -->
+      <div class="player-actions">
+        <button id="btn-export" class="action-btn">Export with YouTube Chrome</button>
+        <button id="btn-new-video" class="action-btn secondary">Choose Another Video</button>
+      </div>
+    </section>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="modal" hidden>
+      <div class="modal-content">
+        <h2>Exporting Video</h2>
+        <p id="export-status">Preparing...</p>
+        <div class="export-progress-bar">
+          <div class="export-progress-fill" id="export-progress-fill"></div>
+        </div>
+        <p class="export-time" id="export-time"></p>
+        <div class="modal-actions">
+          <button id="btn-cancel-export" class="action-btn secondary">Cancel</button>
+          <a id="btn-download" class="action-btn" hidden>Download</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/icons.js"></script>
+  <script src="js/upload.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/chrome-renderer.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YT Chrome Exporter - Tests</title>
+  <style>
+    body { font-family: monospace; background: #1a1a1a; color: #e0e0e0; padding: 20px; margin: 0; }
+    h1 { font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 8px; }
+    .suite h2 { font-size: 14px; color: #aaa; margin: 16px 0 8px; }
+    .test { padding: 4px 8px; font-size: 13px; }
+    .pass { color: #4caf50; }
+    .fail { color: #f44336; }
+    .error { color: #ff9800; font-size: 12px; margin-left: 20px; margin-top: 2px; }
+    .summary { font-size: 16px; font-weight: bold; padding: 12px; border-radius: 4px; margin-bottom: 16px; }
+    .summary:not(.has-failures) { background: #1b3a1b; color: #4caf50; }
+    .summary.has-failures { background: #3a1b1b; color: #f44336; }
+  </style>
+</head>
+<body>
+  <h1>YT Chrome Exporter Tests</h1>
+  <div id="test-results">Running...</div>
+
+  <script src="test-runner.js"></script>
+  <script src="../js/icons.js"></script>
+  <script src="../js/upload.js"></script>
+  <script src="../js/player.js"></script>
+  <script src="../js/chrome-renderer.js"></script>
+  <script src="../js/export.js"></script>
+  <script src="upload.test.js"></script>
+  <script src="player.test.js"></script>
+  <script src="chrome-renderer.test.js"></script>
+  <script src="export.test.js"></script>
+
+  <script>
+    TestRunner.run().then(results => TestRunner.render(results));
+  </script>
+</body>
+</html>
