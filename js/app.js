@@ -18,6 +18,13 @@ const App = (() => {
     document.getElementById('btn-export').addEventListener('click', startExport);
     document.getElementById('btn-new-video').addEventListener('click', resetToUpload);
     document.getElementById('btn-cancel-export').addEventListener('click', cancelExport);
+
+    const sidebarUpload = document.getElementById('sidebar-upload-card');
+    if (sidebarUpload) {
+      sidebarUpload.addEventListener('click', () => {
+        document.getElementById('file-input').click();
+      });
+    }
   }
 
   function showView(name) {
@@ -30,7 +37,18 @@ const App = (() => {
   function onFileReady(file, objectUrl) {
     const video = document.getElementById('video');
     video.src = objectUrl;
-    document.getElementById('video-title').textContent = file.name.replace(/\.[^.]+$/, '');
+
+    const name = file.name.replace(/\.[^.]+$/, '');
+    document.getElementById('video-title').textContent = name;
+    document.getElementById('video-info-title').textContent = name;
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    document.getElementById('video-info-date').textContent = dateStr;
+
+    const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+    document.getElementById('video-info-views').textContent = `${sizeMB} MB`;
+
     showView('player');
     Player.load();
   }
