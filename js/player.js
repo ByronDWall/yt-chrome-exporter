@@ -2,6 +2,9 @@ const Player = (() => {
   let container, video, title;
   let idleTimer = null;
   let isDragging = false;
+  let blurCanvas, blurCtx;
+  let blurRAF = null;
+  let needsBlur = false;
 
   const els = {};
 
@@ -236,6 +239,7 @@ const Player = (() => {
     updatePlayIcon();
     updateCenterPlay();
     resetIdleTimer();
+    if (needsBlur) drawBlurFrame();
   }
 
   function onPause() {
@@ -243,6 +247,10 @@ const Player = (() => {
     updateCenterPlay();
     clearIdleTimer();
     container.classList.remove('controls-hidden');
+    stopBlurFill();
+    if (needsBlur && blurCtx) {
+      blurCtx.drawImage(video, 0, 0, 160, 90);
+    }
   }
 
   function onTimeUpdate() {
@@ -260,6 +268,57 @@ const Player = (() => {
   function onLoadedMetadata() {
     updateProgressUI();
     updateVolumeUI();
+    setupBlurFill();
+  }
+
+  function setupBlurFill() {
+    if (!video.videoWidth || !video.videoHeight) return;
+    const videoRatio = video.videoWidth / video.videoHeight;
+    const containerRatio = 16 / 9;
+    needsBlur = Math.abs(videoRatio - containerRatio) > 0.05;
+
+    blurCanvas = document.getElementById('blur-fill');
+    if (!blurCanvas) return;
+
+    if (needsBlur) {
+      blurCanvas.width = 160;
+      blurCanvas.height = 90;
+      blurCtx = blurCanvas.getContext('2d');
+      blurCanvas.classList.add('active');
+      drawBlurOnceReady();
+    } else {
+      blurCanvas.classList.remove('active');
+    }
+  }
+
+  function drawBlurOnceReady() {
+    if (!blurCtx || !video) return;
+    let attempts = 0;
+    function tryDraw() {
+      if (!blurCtx || !video || attempts > 60) return;
+      attempts++;
+      blurCtx.drawImage(video, 0, 0, 160, 90);
+      const sample = blurCtx.getImageData(80, 45, 1, 1).data;
+      if (sample[0] === 0 && sample[1] === 0 && sample[2] === 0) {
+        setTimeout(tryDraw, 50);
+      }
+    }
+    tryDraw();
+  }
+
+  function drawBlurFrame() {
+    if (!needsBlur || !blurCtx || !video) return;
+    blurCtx.drawImage(video, 0, 0, 160, 90);
+    if (!video.paused && !video.ended) {
+      blurRAF = requestAnimationFrame(drawBlurFrame);
+    }
+  }
+
+  function stopBlurFill() {
+    if (blurRAF) {
+      cancelAnimationFrame(blurRAF);
+      blurRAF = null;
+    }
   }
 
   function init(options) {
@@ -329,6 +388,9 @@ const Player = (() => {
     updatePlayIcon();
     updateCenterPlay();
     updateVolumeUI();
+    if (video.readyState >= 1) {
+      onLoadedMetadata();
+    }
   }
 
   function destroy() {
@@ -362,9 +424,14 @@ const Player = (() => {
     document.removeEventListener('keydown', onKeyDown);
 
     clearIdleTimer();
+    stopBlurFill();
+    if (blurCanvas) blurCanvas.classList.remove('active');
 
     isDragging = false;
     isDraggingVolume = false;
+    needsBlur = false;
+    blurCanvas = null;
+    blurCtx = null;
     container = null;
     video = null;
     title = null;

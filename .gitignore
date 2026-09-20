@@ -1,5 +1,7 @@
 .DS_Store
 *.mp4
 *.webm
-*.png
 .playwright-mcp/
+# Keep screenshots out but allow project images
+*.png
+!img/

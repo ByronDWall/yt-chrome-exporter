@@ -26,7 +26,7 @@
         </button>
       </div>
       <div class="yt-header-actions">
-        <div class="yt-avatar"></div>
+        <img class="yt-avatar" src="img/avatar.jpg" alt="User">
       </div>
     </div>
   </header>
@@ -54,6 +54,7 @@
         <div class="watch-primary">
           <!-- Player -->
           <div class="player-container" id="player-container">
+            <canvas id="blur-fill" class="blur-fill"></canvas>
             <video id="video" preload="metadata"></video>
 
             <div class="player-top-gradient" id="player-top">
